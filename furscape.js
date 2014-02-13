@@ -27,6 +27,10 @@ var Furcape = module.exports = function Furcape(options) {
 // **Returns** nothing.
 //
 Furcape.prototype.registerCriteria = function regCrit(criteria) {
+  if (Array.isArray(criteria)) {
+    return criteria.forEach(this.registerCriteria.bind(this));
+  }
+
   if (this.criteria[criteria.name]) {
     throw new Error('Criteria ' + criteria.name + ' already defined.');
   }
