@@ -48,14 +48,14 @@ var criterion = module.exports = function () {
 //
 // # Evaluate
 //
-// This funtion is called to see if a user matches the specific rules set or
+// This function is called to see if a user matches the specific rules set or
 // not.
 //
 // * **user**, a user object.
 // * **options**, the options set in the interface when adding this criterion
 //   to a group.
 // * **group**, the group object this criterion belongs to.
-// * **calback**, a function with the signature `function (err, result)`. If
+// * **callback**, a function with the signature `function (err, result)`. If
 //   the user does not match the criteria pass the `err` variable. Further
 //   evaluation will be cancelled and the user will be deemed _not_ a part of
 //   the group. The `result` variable may be either `true` or `false`. All
@@ -143,6 +143,6 @@ The result is an array of groups the user belongs to and the server responds
 with this array. If the user belongs to no groups an empty array is sent back.
 
 ```javascript
-["10_persent", "a", "new_feed"]
+["10_percent", "a", "new_feed"]
 ```
 
