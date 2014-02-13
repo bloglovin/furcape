@@ -6,6 +6,8 @@
 'use strict';
 
 var Group = require('./lib/group');
+var async  = require('async');
+var assert = require('assert');
 
 var Furcape = module.exports = function Furcape(options) {
   if (!(this instanceof Furcape)) {
@@ -60,5 +62,44 @@ Furcape.prototype.createGroup = function createGroup() {
 //
 Furcape.prototype.evaluate = function evaluate(data, groups) {
 
+};
+
+//
+// ## Evaluate Group
+//
+// Evaluates data against one group and returns a boolean if the data passes
+// the tests for that group.
+//
+// * **data**, an object to test.
+// * **group**, the name of the group to test.
+// * **callback**, `function (err, passed) {}`.
+//
+Furcape.prototype.evaluateGroup = function evalGroup(data, groupName, fn) {
+  var group = this.groups[groupName];
+  assert(group, 'Cannot evaluate data against non-existing group: ' + groupName);
+
+  function test(criteria) {
+    return function testCriteria(callback) {
+      if (!group.criteria[criteria]) {
+        return callback(
+          new Error('Missing criteria ' + criteria + ' when testing group ' + groupName),
+          null
+        );
+      }
+
+      group.criteria[criteria].test(data, group, callback);
+    };
+  }
+
+  var tests = Object.keys(group).map(test);
+  async.parallel(tests, function testCallback(err, result) {
+    if (err) return fn(err, false);
+    var pass = false;
+    if (result.indexOf(false) === -1) {
+      pass = result.indexOf(true) !== -1;
+    }
+
+    return fn(null, pass);
+  });
 };
 
