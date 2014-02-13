@@ -1,0 +1,27 @@
+{
+  "name": "furcape",
+  "version": "0.0.0",
+  "description": "Group objects based on a set of criteria.",
+  "main": "furscape.js",
+  "scripts": {
+    "test": "mocha -u tdd -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bloglovin/furcape.git"
+  },
+  "keywords": [
+    "group",
+    "ab",
+    "abtest"
+  ],
+  "author": "Bloglovin <dev@bloglovin.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bloglovin/furcape/issues"
+  },
+  "homepage": "https://github.com/bloglovin/furcape",
+  "dependencies": {
+    "tiny-uuid": "~1.0.0"
+  }
+}
