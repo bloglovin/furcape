@@ -2,7 +2,7 @@
   "name": "furcape",
   "version": "0.0.0",
   "description": "Group objects based on a set of criteria.",
-  "main": "furscape.js",
+  "main": "furcape.js",
   "scripts": {
     "test": "./node_modules/.bin/istanbul test ./node_modules/.bin/_mocha -- -R spec"
   },
