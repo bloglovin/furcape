@@ -1,6 +1,7 @@
 var assert     = require('assert');
 var Percentage = require('../lib/percentage');
 var Group      = require('../lib/group');
+var async      = require('async');
 
 describe('Percentage', function () {
   it('correctly reports it\'s name', function () {
@@ -32,11 +33,10 @@ describe('Percentage', function () {
     assert.equal(i, 11 + 238*Math.pow(2, 8) + 199*Math.pow(2, 16));
   });
 
-  // Input data will yield a `grp` of one in `test()`.
   it('correctly tests an object', function (done) {
     var p = new Percentage();
     var g = Group();
-    g.uuid = 'foobarz';
+    g.uuid = 'foo';
 
     var data = {
       id: 10,
@@ -51,6 +51,42 @@ describe('Percentage', function () {
     p.test(data, g, options, function (err, passed) {
       assert(!err);
       assert(passed);
+      done();
+    });
+  });
+
+  it('correctly distributes groups', function (done) {
+    this.timeout(10 * 1000);
+    var p = new Percentage();
+    var g = Group();
+    var options = {
+      hashProps: ['data.id', 'group.uuid'],
+      percent: 10
+    };
+
+    // Generate a ton of tests
+    var tests = [];
+    function test() {
+      var data = { id: Math.random() * 1000 + Date.now() / Math.random() };
+      return function (fn) {
+        p.test(data, g, options, fn);
+      };
+    }
+
+    var count = 10000;
+    for (var i = 0; i < count; i++) {
+      tests.push(test());
+    }
+
+    // Run tests and calculate the spread
+    async.parallel(tests, function (err, result) {
+      assert(!err);
+      var passed  = result.filter(function (i) { return i; });
+      var percent = (passed.length / count) * 100;
+      var errorMargin = 0.5;
+      var lowerBounds = options.percent - errorMargin;
+      var upperBounds = options.percent + errorMargin;
+      assert(percent > lowerBounds && percent < upperBounds);
       done();
     });
   });
