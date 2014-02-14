@@ -73,7 +73,7 @@ describe('Percentage', function () {
       };
     }
 
-    var count = 10000;
+    var count = 50000;
     for (var i = 0; i < count; i++) {
       tests.push(test());
     }
