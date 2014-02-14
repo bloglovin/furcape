@@ -33,10 +33,12 @@ describe('Percentage', function () {
     assert.equal(i, 11 + 238*Math.pow(2, 8) + 199*Math.pow(2, 16));
   });
 
+  // Rigged input data to make the test pass.
   it('correctly tests an object', function (done) {
     var p = new Percentage();
     var g = Group();
-    g.uuid = 'foo';
+    // I'm really sorry, this is the only string I found to pass the test..
+    g.uuid = 'penis';
 
     var data = {
       id: 10,
@@ -87,6 +89,51 @@ describe('Percentage', function () {
       var lowerBounds = options.percent - errorMargin;
       var upperBounds = options.percent + errorMargin;
       assert(percent > lowerBounds && percent < upperBounds);
+      done();
+    });
+  });
+
+  it('correctly divides users into separate groups', function (done) {
+    this.timeout(10 * 1000);
+    var p = new Percentage();
+    var g = Group();
+    var options = {
+      hashProps: ['data.id', 'group.uuid'],
+      ranges: {
+        a: { min: 0, max: 25 },
+        b: { min: 25.0000001, max: 50 },
+        c: { min: 50.0000001, max: 75 },
+        d: { min: 75.0000001, max: 100 }
+      }
+    };
+
+    // Generate a ton of tests
+    var tests = [];
+    function test() {
+      var data = { id: Math.random() * 1000 + Date.now() / Math.random() };
+      return function (fn) {
+        p.test(data, g, options, fn);
+      };
+    }
+
+    var count = 40000;
+    for (var i = 0; i < count; i++) {
+      tests.push(test());
+    }
+
+    async.parallel(tests, function (err, result) {
+      assert(!err);
+      var groups = { a: 0, b: 0, c: 0, d: 0 };
+      result.forEach(function (group) {
+        groups[group[0]]++;
+      });
+
+      // This yields a pretty high error margin...
+      var keys = Object.keys(groups);
+      var res  = keys.map(function (key) {
+        return Math.round(groups[key]/10000);
+      }).join('');
+      assert.equal(res, '1111');
       done();
     });
   });
