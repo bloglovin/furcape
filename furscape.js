@@ -5,9 +5,9 @@
 /* jshint node: true */
 'use strict';
 
-var Group = require('./lib/group');
 var async  = require('async');
 var assert = require('assert');
+var Group  = require('./lib/group');
 
 var Furcape = module.exports = function Furcape(options) {
   if (!(this instanceof Furcape)) {
@@ -45,9 +45,23 @@ Furcape.prototype.registerCriteria = function regCrit(criteria) {
 //
 // Define a new group with the given rules.
 //
-Furcape.prototype.createGroup = function createGroup() {
+// * **title**, human readable name of group.
+// * **name**, machine readable name of group.
+// * **criteria**, an object that defines the group.
+//
+// **Returns** the newly created group.
+//
+Furcape.prototype.createGroup = function createGroup(title, name, criteria) {
+  if (this.groups[name]) {
+    throw new Error('Group ' + name + ' already exists.');
+  }
 
+  this.groups[name] = new Group();
 };
+
+//
+// ## Restore a Group
+//
 
 //
 // ## Evaluate Data
@@ -78,16 +92,17 @@ Furcape.prototype.evaluateGroup = function evalGroup(data, groupName, fn) {
   var group = this.groups[groupName];
   assert(group, 'Cannot evaluate data against non-existing group: ' + groupName);
 
+  var self = this;
   function test(criteria) {
     return function testCriteria(callback) {
-      if (!group.criteria[criteria]) {
+      if (!self.criteria[criteria]) {
         return callback(
           new Error('Missing criteria ' + criteria + ' when testing group ' + groupName),
           null
         );
       }
 
-      group.criteria[criteria].test(data, group, callback);
+      self.criteria[criteria].test(data, group, callback);
     };
   }
 
