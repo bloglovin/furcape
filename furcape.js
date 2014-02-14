@@ -33,11 +33,13 @@ Furcape.prototype.registerCriteria = function regCrit(Criteria) {
     return Criteria.forEach(this.registerCriteria.bind(this));
   }
 
-  if (this.criteria[Criteria.name]) {
-    throw new Error('Criteria ' + Criteria.name + ' already defined.');
+  var name = Criteria.getName();
+
+  if (this.criteria[name]) {
+    throw new Error('Criteria ' + name + ' already defined.');
   }
 
-  this.criteria[Criteria.name] = new Criteria();
+  this.criteria[name] = new Criteria();
 };
 
 //

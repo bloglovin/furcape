@@ -34,10 +34,10 @@ describe('Furcape', function () {
 var testeria = function testeria() {
 
 };
-testeria.name = 'testeria';
+testeria.getName = function () { return 'testeria'; };
 
 var festeria = function festeria() {
 
 };
-festeria.name = 'festeria';
+festeria.getName = function () { return 'festeria'; };
 
