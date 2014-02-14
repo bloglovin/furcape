@@ -28,16 +28,16 @@ var Furcape = module.exports = function Furcape(options) {
 //
 // **Returns** nothing.
 //
-Furcape.prototype.registerCriteria = function regCrit(criteria) {
-  if (Array.isArray(criteria)) {
-    return criteria.forEach(this.registerCriteria.bind(this));
+Furcape.prototype.registerCriteria = function regCrit(Criteria) {
+  if (Array.isArray(Criteria)) {
+    return Criteria.forEach(this.registerCriteria.bind(this));
   }
 
-  if (this.criteria[criteria.name]) {
-    throw new Error('Criteria ' + criteria.name + ' already defined.');
+  if (this.criteria[Criteria.name]) {
+    throw new Error('Criteria ' + Criteria.name + ' already defined.');
   }
 
-  this.criteria[criteria.name] = criteria;
+  this.criteria[Criteria.name] = new Criteria();
 };
 
 //
