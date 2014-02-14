@@ -4,7 +4,7 @@
   "description": "Group objects based on a set of criteria.",
   "main": "furscape.js",
   "scripts": {
-    "test": "mocha -u tdd -R spec"
+    "test": "./node_modules/.bin/istanbul test ./node_modules/.bin/_mocha -- -R spec"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
     "async": "~0.2.10"
   },
   "devDependencies": {
-    "mocha": "~1.17.1"
+    "mocha": "~1.17.1",
+    "istanbul": "~0.2.4"
   }
 }
