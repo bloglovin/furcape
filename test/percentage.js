@@ -137,5 +137,49 @@ describe('Percentage', function () {
       done();
     });
   });
+
+  it('correctly omits putting object in group not in range', function (done) {
+    var p = new Percentage();
+    var g = Group();
+    var options = {
+      hashProps: ['data.id', 'group.uuid'],
+      ranges: {
+        a: { min: 0, max: 10 },
+        b: { min: 90, max: 100 }
+      }
+    };
+    var data = { id: 'foo' };
+    p.test(data, g, options, function (err, passed) {
+      assert(!err);
+      assert(!passed);
+      done();
+    });
+  });
+
+  it('returns error if invalid options are passed', function (done) {
+    var p = new Percentage();
+    var g = Group();
+    var options = {
+      hashProps: ['data.id', 'group.uuid'],
+    };
+    var data = { id: 'foo' };
+    p.test(data, g, options, function (err, passed) {
+      assert(err);
+      done();
+    });
+  });
+
+  it('returns error if hashProps option is missing', function (done) {
+    var p = new Percentage();
+    var g = Group();
+    var options = {
+      percent: 10,
+    };
+    var data = { id: 'foo' };
+    p.test(data, g, options, function (err, passed) {
+      assert(err);
+      done();
+    });
+  });
 });
 
