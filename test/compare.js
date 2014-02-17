@@ -107,5 +107,21 @@ describe('Compare', function () {
       done();
     });
   });
+
+  it('correctly runs several tests', function (done) {
+    var c = new Compare();
+    var g = new Group();
+    var d = { a: 15, b: 10, c: 5 };
+    var o = {
+      greaterThan: { a: 'data.a', b: 'data.b' },
+      lessThan: { a: 'data.c', b: 'data.b' }
+    };
+
+    c.test(d, g, o, function (err, passed) {
+      assert(!err);
+      assert(passed);
+      done();
+    });
+  });
 });
 
