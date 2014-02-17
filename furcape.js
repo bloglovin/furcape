@@ -11,10 +11,11 @@ var Group      = require('./lib/group');
 var Percentage = require('./lib/percentage');
 var Equality   = require('./lib/equality');
 var Compare    = require('./lib/compare');
+var Datetime   = require('./lib/date');
 
-var Furcape = module.exports = function Furcape(options) {
+var Furcape = module.exports = function Furcape() {
   if (!(this instanceof Furcape)) {
-    return new Furcape(options);
+    return new Furcape();
   }
 
   this.criteria = {};   // Holds available criteria
