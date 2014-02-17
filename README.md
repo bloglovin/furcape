@@ -233,7 +233,7 @@ Allows you to compare dates. You can currently see if a date is `before` or
 
 ### Equality
 
-Used to determine if to properties are equal.
+Used to determine if two properties are equal.
 
 ```
 {
