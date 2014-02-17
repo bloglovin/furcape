@@ -141,6 +141,7 @@ describe('Percentage', function () {
   it('correctly omits putting object in group not in range', function (done) {
     var p = new Percentage();
     var g = Group();
+    g.uuid = 'bar';
     var options = {
       hashProps: ['data.id', 'group.uuid'],
       ranges: {
