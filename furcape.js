@@ -159,20 +159,26 @@ Furcape.prototype.evaluateGroup = function evalGroup(data, groupName, fn) {
   var tests = Object.keys(group.criteria).map(test);
   async.parallel(tests, function testCallback(err, result) {
     if (err) return fn(err, false);
+
+    // Check any return values for arrays and concat them into one.
+    // If a criteria returns array, treat the test as passed.
     var pass = false;
-    var grps = false;
-    result.forEach(function (r) {
+    var grps = [];
+    result.forEach(function (r, i) {
       if (Array.isArray(r)) {
-        grps = r;
-        result[r] = true;
+        grps = grps.concat(r);
+        result[i] = true;
       }
     });
 
-    if (pass === false && result.indexOf(false) === -1) {
+    // Check result to see if the group as a whole passed.
+    // Pass if no `false` and at least one `true`.
+    if (result.indexOf(false) === -1) {
       pass = result.indexOf(true) !== -1;
     }
 
-    return fn(null, grps ? grps : pass);
+    // If we passed and has groups, return groups, otherwise just `pass`.
+    return fn(null, pass && grps.length ? grps : pass);
   });
 };
 
