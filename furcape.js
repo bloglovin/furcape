@@ -80,8 +80,43 @@ Furcape.prototype.createGroup = function createGroup(title, name, criteria) {
 //
 // **Returns** an array of matching groups. Empty array in case of no matches.
 //
-Furcape.prototype.evaluate = function evaluate(data, groups) {
+Furcape.prototype.evaluate = function evaluate(data, groups, fn) {
+  if (typeof groups === 'function') {
+    fn     = groups;
+    groups = false;
+  }
 
+  if (!Array.isArray(groups)) {
+    groups = Object.keys(this.groups);
+  }
+
+  var self  = this;
+  var tests = {};
+  function makeTest(group) {
+    tests[group] = function evalGroup(callback) {
+      self.evaluateGroup(data, group, callback);
+    };
+  }
+
+  groups.forEach(makeTest);
+
+  async.parallel(tests, function (err, results) {
+    if (err) return fn(err, null);
+
+    var groups = [];
+    Object.keys(results).forEach(function (r) {
+      if (Array.isArray(results[r])) {
+        groups = groups.concat(results[r]);
+      }
+      else {
+        if (results[r]) {
+          groups.push(r);
+        }
+      }
+    });
+
+    fn(null, groups);
+  });
 };
 
 //
@@ -116,11 +151,19 @@ Furcape.prototype.evaluateGroup = function evalGroup(data, groupName, fn) {
   async.parallel(tests, function testCallback(err, result) {
     if (err) return fn(err, false);
     var pass = false;
-    if (result.indexOf(false) === -1) {
+    var grps = false;
+    result.forEach(function (r) {
+      if (Array.isArray(r)) {
+        grps = r;
+        result[r] = true;
+      }
+    });
+
+    if (pass === false && result.indexOf(false) === -1) {
       pass = result.indexOf(true) !== -1;
     }
 
-    return fn(null, pass);
+    return fn(null, grps ? grps : pass);
   });
 };
 
