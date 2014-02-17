@@ -58,7 +58,11 @@ Furcape.prototype.createGroup = function createGroup(title, name, criteria) {
     throw new Error('Group ' + name + ' already exists.');
   }
 
-  this.groups[name] = new Group();
+  this.groups[name] = new Group({
+    title: name,
+    name: name,
+    criteria: criteria
+  });
 };
 
 //
@@ -104,11 +108,11 @@ Furcape.prototype.evaluateGroup = function evalGroup(data, groupName, fn) {
         );
       }
 
-      self.criteria[criteria].test(data, group, callback);
+      self.criteria[criteria].test(data, group, group.criteria[criteria], callback);
     };
   }
 
-  var tests = Object.keys(group).map(test);
+  var tests = Object.keys(group.criteria).map(test);
   async.parallel(tests, function testCallback(err, result) {
     if (err) return fn(err, false);
     var pass = false;
