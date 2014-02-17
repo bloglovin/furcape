@@ -1,6 +1,6 @@
 {
   "name": "furcape",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Group objects based on a set of criteria.",
   "main": "furcape.js",
   "scripts": {
