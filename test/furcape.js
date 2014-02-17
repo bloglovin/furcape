@@ -34,8 +34,6 @@ describe('Furcape', function () {
 
   it('correctly evaluates one group', function (done) {
     var f = furcape();
-    f.registerCriteria(compare);
-    f.registerCriteria(equal);
 
     f.createGroup('foo', 'bar', {
       compare: {
@@ -57,8 +55,6 @@ describe('Furcape', function () {
 
   it('correctly evaluates one group failing', function (done) {
     var f = furcape();
-    f.registerCriteria(compare);
-    f.registerCriteria(equal);
 
     f.createGroup('foo', 'bar', {
       compare: {
@@ -80,9 +76,6 @@ describe('Furcape', function () {
 
   it('correctly evaluates all groups', function (done) {
     var f = furcape();
-    f.registerCriteria(compare);
-    f.registerCriteria(equal);
-    f.registerCriteria(percent);
 
     f.createGroup('foo', 'foo', {
       compare: {
@@ -119,9 +112,6 @@ describe('Furcape', function () {
 
   it('correctly evaluates a subset of groups', function (done) {
     var f = furcape();
-    f.registerCriteria(compare);
-    f.registerCriteria(equal);
-    f.registerCriteria(percent);
 
     f.createGroup('foo', 'foo', {
       compare: {
@@ -167,7 +157,7 @@ describe('Furcape', function () {
   it('returns an error for invalid groups', function (done) {
     var f = furcape();
     f.createGroup('foo', 'foo', {
-      compare: {
+      foobar: {
         lessThan: { a: 'data.a', b: 'data.b' },
       }
     });
@@ -181,10 +171,6 @@ describe('Furcape', function () {
 
   it('correctly catches failing tests', function (done) {
     var f = furcape();
-    f.registerCriteria(compare);
-    f.registerCriteria(equal);
-    f.registerCriteria(percent);
-
     f.createGroup('foo', 'foo', {
       compare: {
         lessThan: { x: 'data.x', b: 'data.b' },
@@ -203,8 +189,6 @@ describe('Furcape', function () {
 
   it('correctly excludes failing groups', function (done) {
     var f = furcape();
-    f.registerCriteria(compare);
-    f.registerCriteria(equal);
 
     f.createGroup('foo', 'foo', {
       compare: {

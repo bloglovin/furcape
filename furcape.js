@@ -5,9 +5,12 @@
 /* jshint node: true */
 'use strict';
 
-var async  = require('async');
-var assert = require('assert');
-var Group  = require('./lib/group');
+var async      = require('async');
+var assert     = require('assert');
+var Group      = require('./lib/group');
+var Percentage = require('./lib/percentage');
+var Equality   = require('./lib/equality');
+var Compare    = require('./lib/compare');
 
 var Furcape = module.exports = function Furcape(options) {
   if (!(this instanceof Furcape)) {
@@ -16,6 +19,11 @@ var Furcape = module.exports = function Furcape(options) {
 
   this.criteria = {};   // Holds available criteria
   this.groups   = {};   // Holds defined groups
+
+  // Register bundeled criteria
+  this.registerCriteria(Percentage);
+  this.registerCriteria(Equality);
+  this.registerCriteria(Compare);
 };
 
 //
