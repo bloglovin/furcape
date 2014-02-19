@@ -68,7 +68,7 @@ Furcape.prototype.createGroup = function createGroup(title, name, criteria) {
   }
 
   this.groups[name] = new Group({
-    title: name,
+    title: title,
     name: name,
     criteria: criteria
   });
@@ -177,7 +177,7 @@ Furcape.prototype.evaluateGroup = function evalGroup(data, groupName, fn) {
       pass = result.indexOf(true) !== -1;
     }
 
-    // If we passed and has groups, return groups, otherwise just `pass`.
+    // If we passed and have groups, return groups, otherwise just `pass`.
     return fn(null, pass && grps.length ? grps : pass);
   });
 };
