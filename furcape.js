@@ -25,6 +25,7 @@ var Furcape = module.exports = function Furcape() {
   this.registerCriteria(Percentage);
   this.registerCriteria(Equality);
   this.registerCriteria(Compare);
+  this.registerCriteria(Datetime);
 };
 
 //
