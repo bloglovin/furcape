@@ -182,5 +182,56 @@ describe('Percentage', function () {
       done();
     });
   });
+
+  it('correctly generates the same response consistently', function (done) {
+    this.timeout(10 * 1000);
+    var p = new Percentage();
+    var g = Group();
+    var options = {
+      hashProps: ['data.id', 'group.uuid'],
+      ranges: {
+        a: { min: 0, max: 25 },
+        b: { min: 25.0000001, max: 50 },
+        c: { min: 50.0000001, max: 75 },
+        d: { min: 75.0000001, max: 100 }
+      }
+    };
+
+    // Generate a ton of tests
+    var tests = [];
+    var data = { id: Math.random() * 1000 + Date.now() / Math.random() };
+    function test() {
+      return function (fn) {
+        p.test(data, g, options, fn);
+      };
+    }
+
+    var count = 100000;
+    for (var i = 0; i < count; i++) {
+      tests.push(test());
+    }
+
+    // Run tests and calculate the spread
+    async.parallel(tests, function (err, result) {
+      assert(!err);
+      var first = null;
+      var passed = true;
+      for (var i = 0, len = result.length; i < len; i++) {
+        var item = result[i][0];
+        if (!first) {
+          first = item;
+          continue;
+        }
+
+        if (item !== first) {
+          passed = false;
+          break;
+        }
+      }
+
+      assert(passed);
+      done();
+    });
+  });
 });
 
