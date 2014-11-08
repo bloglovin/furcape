@@ -60,15 +60,17 @@ Furcape.prototype.registerCriteria = function regCrit(Criteria) {
 // * **title**, human readable name of group.
 // * **name**, machine readable name of group.
 // * **criteria**, an object that defines the group.
+// * **uuid**, UUID for pre-exisiting group.
 //
 // **Returns** the newly created group.
 //
-Furcape.prototype.createGroup = function createGroup(title, name, criteria) {
+Furcape.prototype.createGroup = function createGroup(title, name, criteria, uuid) {
   if (this.groups[name]) {
     throw new Error('Group ' + name + ' already exists.');
   }
 
   this.groups[name] = new Group({
+    uuid: uuid,
     title: title,
     name: name,
     criteria: criteria
